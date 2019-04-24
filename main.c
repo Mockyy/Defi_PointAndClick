@@ -1,32 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "defineform.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <SDL_mixer.h>
-#include <stdio.h>
-
-#define WINDOW_WIDTH 1600
-#define WINDOW_HEIGHT 800
-
-typedef struct tGame{
-    SDL_Window *gWindow;
-    SDL_Renderer *gRenderer;
-}tGame;
-
-typedef struct tTaille{
-    int nW;
-    int nH;
-}tTaille;
-
-int init(tGame *myGame);
-void events(int *fin);
-SDL_Texture *texte(tGame myGame, char *texte, TTF_Font *police, SDL_Color couleur);
-void couleur(SDL_Window* fenetre, SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 void nouvellePage(tGame myGame, SDL_Texture *textureBackground, SDL_Texture *textureTimer, SDL_Rect *posTimer);
-void tailleTexture(SDL_Texture *texture, SDL_Rect *posTexture);
-int collision(int curseurX, int curseurY, SDL_Rect box);
 
 int main(int argc, char *argv[])
 {
@@ -42,43 +16,25 @@ int main(int argc, char *argv[])
     }
 
     ///Background livre
-    SDL_Surface *TempSurface = IMG_Load("./Assets/Sprites/book_background.png");
-
-    SDL_Texture *textureBackground = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
-
-    SDL_free(TempSurface);
+    SDL_Texture *textureBackground = createTexture("./Assets/Sprites/book_background.png", myGame);
 
     ///Livvre couverture
-    TempSurface = IMG_Load("./Assets/Sprites/bookcover.jpg");
-
-    SDL_Texture *textureCover = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
+    SDL_Texture *textureCover = createTexture("./Assets/Sprites/bookcover.jpg", myGame);
 
     ///Background image
-    TempSurface = IMG_Load("./Assets/Sprites/background1.png");
-
-    SDL_Texture *textureBackgroundImage = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
+    SDL_Texture *textureBackgroundImage = createTexture("./Assets/Sprites/background1.png", myGame);
 
     ///Temoin1
-    TempSurface = IMG_Load("./Assets/Sprites/temoin1.png");
-
-    SDL_Texture *textureTemoin1 = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
-
-    SDL_free(TempSurface);
+    SDL_Texture *textureTemoin1 = createTexture("./Assets/Sprites/temoin1.png", myGame);
 
     ///Fils
-    TempSurface = IMG_Load("./Assets/Sprites/fils1.png");
-
-    SDL_Texture *textureFils = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
-
-    SDL_FreeSurface(TempSurface);
+    SDL_Texture *textureFils = createTexture("./Assets/Sprites/fils1.png", myGame);
 
     ///Bouton objection
-    TempSurface = IMG_Load("./Assets/Sprites/objection.png");
-    SDL_Texture *textureObjection = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
+    SDL_Texture *textureObjection = createTexture("./Assets/Sprites/objection.png", myGame);
 
     ///Bouton next
-    TempSurface = IMG_Load("./Assets/Sprites/next.png");
-    SDL_Texture *textureNext = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
+    SDL_Texture *textureNext = createTexture("./Assets/Sprites/next.png", myGame);
 
     //-----Création de la texture du texte-----//
     TTF_Font *KenneyPixel = NULL;
@@ -86,18 +42,8 @@ int main(int argc, char *argv[])
     SDL_Texture *textureTexte;
     int cpt = 0;
     int PhaseTemoignage = 1;
-
     int Page = 0;
 
-    //-----Timer-----//
-    int currentFrame, lastSecond = 0, seconds = 0;
-    char cTime[4];
-    SDL_Color colorTimer = {0, 0, 0, 255};
-    SDL_Surface* surfaceTimer;
-    SDL_Texture* textureTimer;
-
-
-    SDL_Rect posTimer = {10, 0, 0, 0};
     SDL_Rect posCover = {800, 0, 0, 0};
     SDL_Rect posBackground = {250, 100, 0, 0};
     SDL_Rect posTemoin1 = {350, 250, 0, 0};
@@ -114,27 +60,12 @@ int main(int argc, char *argv[])
     if(myGame.gWindow)
     {
         int fin = 0;
-        char* temoignage[4] = {"J'ai vu un homme sur l'aile", "Un homme, d'une telle laideur", "Il ressemblait à Killian", "Mais en plus beau"};
-        char* temoignage2[4] = {"Incoyable du cul", "Quel ramdam !", "J'adore le zboub", "Pipe et jambe de bois"};
+        char* temoignage[4] = {"Le 20 aout j'étais seul chez moi.","Je connais James depuis l'école de commerce.",
+        "Il est le grand frère que je n'ai jamais eu.","On partage tout !"};
+        char* temoignage2[2] = {"Il est vrai que j'ai eu une relation avec Katerine avant qu'elle ne soit avec James.",
+        "Mais c'était il y a plus 20 ans !"};
 
         while(fin!=1){
-
-        ///Timer
-            //Calcul des secondes
-            currentFrame = SDL_GetTicks();
-            seconds = currentFrame / 1000;
-            if(seconds != lastSecond)
-            {
-                lastSecond = seconds;
-//                printf("Secondes : %d\n", lastSecond);
-            }
-            //Copie du timer dans une chaine
-            sprintf(cTime, "%d", lastSecond);
-            //Écriture du texte sur une surface
-            surfaceTimer = TTF_RenderText_Blended(KenneyPixel, cTime, colorTimer);
-            //Conversion de la surface en texture
-            textureTimer = SDL_CreateTextureFromSurface(myGame.gRenderer, surfaceTimer);
-
 
         ///Events
             SDL_Event event;
@@ -155,49 +86,41 @@ int main(int argc, char *argv[])
                     case SDL_MOUSEBUTTONDOWN:
                         if(event.button.button == SDL_BUTTON_LEFT)
                         {
-//                            if(event.button.clicks == 2)
-//                            {
-//                                printf("Double click\n");
-//                            }
-//                            if(event.type == SDL_MOUSEBUTTONDOWN)
+                            if(collision(event.button.x, event.button.y, posDialogue))
                             {
-                                if(collision(event.button.x, event.button.y, posDialogue))
+                                if(cpt!=3)
                                 {
-                                    if(cpt!=3)
-                                    {
-                                        cpt++;
-                                    }
-                                    else
-                                    {
-                                        cpt=0;
-                                    }
+                                    cpt++;
                                 }
-                                if(collision(event.button.x, event.button.y, posObjection))
+                                else
                                 {
-                                    if((cpt==2) && (PhaseTemoignage==1))
-                                    {
-                                        printf("Bonne reponse\n");
-                                        TempSurface = IMG_Load("./Assets/Sprites/temoin2.png");
-                                        textureTemoin1 = SDL_CreateTextureFromSurface(myGame.gRenderer, TempSurface);
-                                        PhaseTemoignage++;
-                                        cpt=0;
-                                    }
-                                    if((cpt==3) && (PhaseTemoignage==2))
-                                    {
-                                        printf("Bonne reponse\n");
-                                        Page++;
-                                    }
+                                    cpt=0;
                                 }
-                                if(collision(event.button.x, event.button.y, posNext))
+                            }
+                            if(collision(event.button.x, event.button.y, posObjection))
+                            {
+                                if((cpt==3) && (PhaseTemoignage==1))
                                 {
+                                    printf("Bonne reponse\n");
+                                    textureTemoin1 = createTexture("./Assets/Sprites/temoin2.png", myGame);
+                                    PhaseTemoignage++;
+                                    cpt=0;
+                                }
+                                if((cpt==1) && (PhaseTemoignage==2))
+                                {
+                                    printf("Bonne reponse\n");
                                     Page++;
-                                    printf("Page %d\n",Page);
                                 }
-                                if(collision(event.button.x, event.button.y, posBack))
-                                {
-                                    Page--;
-                                    printf("Page %d\n",Page);
-                                }
+                            }
+                            if(collision(event.button.x, event.button.y, posNext))
+                            {
+                                Page++;
+                                printf("Page %d\n",Page);
+                            }
+                            if(collision(event.button.x, event.button.y, posBack))
+                            {
+                                Page--;
+                                printf("Page %d\n",Page);
                             }
                         }
                         break;
@@ -234,7 +157,6 @@ int main(int argc, char *argv[])
 
             tailleTexture(textureTexte, &posDialogue);
 
-            tailleTexture(textureTimer, &posTimer);
 
         ///Couleur de fond (blanc)
             couleur(myGame.gWindow, myGame.gRenderer, 255, 255, 255, 255);
@@ -252,14 +174,10 @@ int main(int argc, char *argv[])
                 SDL_RenderCopy(myGame.gRenderer, textureBackground, NULL, NULL);
                 //Background image
                 SDL_RenderCopy(myGame.gRenderer, textureBackgroundImage, NULL, &posBackground);
-                //Timer
-                SDL_RenderCopy(myGame.gRenderer, textureTimer, NULL, &posTimer);
                 //Sprite
                 SDL_RenderCopy(myGame.gRenderer, textureTemoin1, NULL, &posTemoin1);
                 //Objection
                 SDL_RenderCopy(myGame.gRenderer, textureObjection, NULL, &posObjection);
-//                //Next
-//                SDL_RenderCopy(myGame.gRenderer, textureNext, NULL, &posNext);
                 //Texte
                 SDL_RenderCopy(myGame.gRenderer, textureTexte, NULL, &posDialogue);
                 //Back
@@ -271,14 +189,10 @@ int main(int argc, char *argv[])
                 SDL_RenderCopy(myGame.gRenderer, textureBackground, NULL, NULL);
                 //Background image
                 SDL_RenderCopy(myGame.gRenderer, textureBackgroundImage, NULL, &posBackground);
-                //Timer
-                SDL_RenderCopy(myGame.gRenderer, textureTimer, NULL, &posTimer);
                 //Sprite
                 SDL_RenderCopy(myGame.gRenderer, textureTemoin1, NULL, &posTemoin1);
                 //Objection
                 SDL_RenderCopy(myGame.gRenderer, textureObjection, NULL, &posObjection);
-//                //Next
-//                SDL_RenderCopy(myGame.gRenderer, textureNext, NULL, &posNext);
                 //Texte
                 SDL_RenderCopy(myGame.gRenderer, textureTexte, NULL, &posDialogue);
                 //Back
@@ -300,7 +214,6 @@ int main(int argc, char *argv[])
 
     ///-----FERMETURE------///
     SDL_DestroyTexture(textureBackground);
-    SDL_DestroyTexture(textureTimer);
     SDL_DestroyRenderer(myGame.gRenderer);
     SDL_DestroyWindow(myGame.gWindow);
 
@@ -312,124 +225,14 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-///--------------------------------------------------------------------------------------------------------------------------------------///
-
-    ///-----METHODES-----///
-
-int init(tGame *myGame)
-{
-    //-----Initialisation de la SDL-----//
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0) // Initialisation de la SDL
-    {
-        printf("Erreur d'initialisation de la SDL : %s",SDL_GetError());
-        return EXIT_FAILURE;
-    }
-
-    if(TTF_Init() == -1)
-    {
-        printf("Erreur d'init TTF : %s\n", SDL_GetError());
-        return EXIT_FAILURE;
-    }
-
-    //-----Création de la fenêtre-----//
-    myGame->gWindow = SDL_CreateWindow("Une fenetre SDL" , 300, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE);
-    if(myGame->gWindow == NULL) // Gestion des erreurs
-    {
-        printf("Erreur lors de la creation d'une fenetre : %s",SDL_GetError());
-        return EXIT_FAILURE;
-    }
-
-    //-----Création du renderer-----//
-    myGame->gRenderer = SDL_CreateRenderer(myGame->gWindow, -1, 0);
-    if(myGame->gRenderer == NULL)
-    {
-        printf("Erreur de création du renderer : %s,",SDL_GetError());
-    }
-
-    return 1;
-}
-
-int collision(int curseurX, int curseurY, SDL_Rect box)
-{
-    if((curseurX >= box.x) && (curseurX <= box.x + box.w)
-        && (curseurY >= box.y) && (curseurY <= box.y + box.h))
-    {
-//        printf("Collision\n");
-        return 1;
-    }
-
-    return 0;
-}
-
 void nouvellePage(tGame myGame, SDL_Texture *textureBackground, SDL_Texture *textureTimer, SDL_Rect *posTimer)
 {
-///Couleur de fond (blanc)
+    ///Couleur de fond (blanc)
     couleur(myGame.gWindow, myGame.gRenderer, 255, 0, 255, 255);
 
-///Copie de toutes les textures sur le renderer
+    ///Copie de toutes les textures sur le renderer
     //Fond livre
     SDL_RenderCopy(myGame.gRenderer, textureBackground, NULL, NULL);
     //Timer
     SDL_RenderCopy(myGame.gRenderer, textureTimer, NULL, posTimer);
-}
-
-void tailleTexture(SDL_Texture *texture, SDL_Rect *posTexture)
-{
-    int w = 0, h = 0;
-    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-    posTexture->h = h;
-    posTexture->w = w;
-}
-
-void events(int *fin)
-{
-    //Gestion d'événement
-    SDL_Event event;
-    if(SDL_PollEvent(&event)){
-        switch(event.type)
-        {
-            case SDL_QUIT:
-                printf("\nFermeture");
-                *fin = 1;
-                break;
-            case SDL_KEYDOWN:
-                switch(event.key.keysym.sym)
-                {
-                    case SDLK_ESCAPE:
-                        *fin = 1;
-                        break;
-                    case SDLK_z:
-                        printf("Z\n");
-                        break;
-                    case SDLK_s:
-                        printf("S\n");
-                        break;
-                }
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                printf("LOL\n");
-                break;
-        }
-    }
-}
-
-SDL_Texture *texte(tGame myGame, char *texte, TTF_Font *police, SDL_Color couleur)
-{
-    SDL_Surface *dialogue;
-    SDL_Texture *dialogueBox;
-
-    dialogue = TTF_RenderText_Blended(police, texte, couleur);
-
-    dialogueBox = SDL_CreateTextureFromSurface(myGame.gRenderer, dialogue);
-
-    return dialogueBox;
-}
-
-void couleur(SDL_Window* fenetre, SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
-{
-    //Choix de la couleur
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
-
-    //"Peint" l'écran de la couleur choisie
-    SDL_RenderClear(renderer);
 }

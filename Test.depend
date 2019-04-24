@@ -1118,14 +1118,8 @@
 	"begin_code.h"
 	"close_code.h"
 
-1554292796 source:c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\main.c
-	<stdio.h>
-	<stdlib.h>
-	<SDL.h>
-	<SDL_image.h>
-	<SDL_ttf.h>
-	<SDL_mixer.h>
-	<stdio.h>
+1556095119 source:c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\main.c
+	"defineform.h"
 
 1550427710 c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\sdl\sdl2-2.0.9\i686-w64-mingw32\include\sdl2\sdl.h
 	"SDL_main.h"
@@ -1488,4 +1482,39 @@
 	"SDL_version.h"
 	"begin_code.h"
 	"close_code.h"
+
+1556095128 c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\defineform.h
+	<stdio.h>
+	<stdlib.h>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<stdio.h>
+	"sdl.h"
+	"texture.h"
+	"clic.h"
+
+1556092778 c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\timer.h
+
+1556092793 source:c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\timer.c
+	"defineform.h"
+
+1556094702 c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\sdl.h
+	"defineform.h"
+
+1556094416 c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\texture.h
+	"defineform.h"
+
+1556094681 source:c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\sdl.c
+	"defineform.h"
+
+1556094409 source:c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\texture.c
+	"defineform.h"
+
+1556095101 c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\clic.h
+	"defineform.h"
+
+1556095089 source:c:\users\mocky\documents\ludus\ii.deuxième année\défi\défi sdl pointnclick\game\clic.c
+	"defineform.h"
 

@@ -47,9 +47,22 @@
 			<Add directory="SDL/SDL2_ttf-2.0.12/i686-w64-mingw32/lib" />
 			<Add directory="SDL/SDL2_mixer-2.0.0/i686-w64-mingw32/lib" />
 		</Linker>
+		<Unit filename="clic.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="clic.h" />
+		<Unit filename="defineform.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="sdl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="sdl.h" />
+		<Unit filename="texture.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="texture.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
